@@ -16,9 +16,14 @@
       background-color: wheat;
       border: 0.25rem solid #8EE4D7 ;
     }
+
+    .odd td {
+      background-color: #333333;
+    }
   </style>
 </head>
 <body>
+  <h1 id="boomText"></h1>
   <table>
     <tbody>
       <tr>
@@ -153,6 +158,8 @@
     const clickSound = document.getElementById('click')
     const boomSound = document.getElementById('boom')
     let lastSound = clickSound;
+    const boomText = document.getElementById('boomText');
+    let boomTextVisible = false;
 
     // TODO: 1 - make it such that if any table cell is clicked, the onClick function below is executed
     // Add event listeners to all table cells
@@ -168,7 +175,10 @@
       if (clickCount % 3 == 0) {
         // boom
         boomSound.play();
-        lastSound = boomSound
+        lastSound = boomSound;
+        // Toggle BOOM text
+        boomTextVisible = !boomTextVisible;
+        boomText.textContent = boomTextVisible ? 'BOOM' : '';
       } else {
         clickSound.play();
         lastSound = clickSound
@@ -178,7 +188,21 @@
       // TODO: 2 - REMOVE THE TABLE CELL THAT WAS CLICKED
       // Remove the clicked table cell
       ev.target.remove();
-
+      
+      // Update odd class on all rows based on cell count
+      updateRowClasses();
+    }
+    
+    function updateRowClasses() {
+      const rows = document.querySelectorAll('tr');
+      rows.forEach(row => {
+        const cellCount = row.children.length;
+        if (cellCount % 2 === 1) {
+          row.classList.add('odd');
+        } else {
+          row.classList.remove('odd');
+        }
+      });
     }
   </script>
 </body>
